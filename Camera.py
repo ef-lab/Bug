@@ -44,8 +44,8 @@ class BugEye:
     def snapshot(self):
         self.camera.capture(self.stream, 'jpeg', bayer=True)
         output = (self.stream.demosaic() >> 2).astype(np.uint8)
-        with open('/mnt/lab/users/manolis/bayer.jpg', 'wb') as f:
-            output.tofile(f)
+        #with open('/mnt/lab/users/manolis/bayer.jpg', 'wb') as f:
+        #    output.tofile(f)
         return output
 
     def light_change_detected(self):
