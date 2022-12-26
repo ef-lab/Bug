@@ -5,13 +5,11 @@ from dataclasses import dataclass
 from dataclasses import field as datafield
 from typing import Any
 import datajoint as dj
-from Tables import *
 
 dj.config["enable_python_native_blobs"] = True
 
 schemata = {'common': 'lab_common',
             'monitoring': 'lab_monitoring'}
-
 
 for schema, value in schemata.items():  # separate connection for internal comminication
     globals()[schema] = dj.create_virtual_module(schema, value, create_tables=True, create_schema=True)
@@ -160,3 +158,60 @@ class Timer:
 
     def add_delay(self, sec):
         self.start_time += sec
+
+@monitoring.schema
+class Temperature(dj.Manual):
+    definition = """
+    # room temperature
+    -> common.room
+    tmst                     : timestamp                    # measurement timestamp
+    ---
+    celcius                  : float                        # in celcius
+    """
+
+
+@monitoring.schema
+class Humidity(dj.Manual):
+    definition = """
+    # room temperature
+    -> common.room
+    tmst                     : timestamp                    # measurement timestamp
+    ---
+    relative_humidity             : float            # in percent
+    """
+
+
+@monitoring.schema
+class Motion(dj.Manual):
+    definition = """
+    # room temperature
+    -> common.room
+    tmst                     : timestamp                    # measurement timestamp
+    ---
+    """
+
+
+@monitoring.schema
+class Light(dj.Manual):
+    definition = """
+    # room temperature
+    -> common.room
+    tmst                     : timestamp                    # measurement timestamp
+    ---
+    R_lumens             : float            # in cd per sqm
+    G_lumens             : float            # in cd per sqm
+    B_lumens             : float            # in cd per sqm
+    trigger="time"           : enum('light')    # Trigger 
+    """
+
+
+@monitoring.schema
+class Camera(dj.Manual):
+    definition = """
+    # room temperature
+    -> common.room
+    tmst                     : timestamp                    # measurement timestamp
+    --- 
+    image             : mediumblob            # in %
+    trigger="time"           : enum('time', 'motion', 'light', 'sound')    # Trigger 
+    """
