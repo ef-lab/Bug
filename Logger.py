@@ -1,4 +1,4 @@
-import numpy, socket, json, os, pathlib, threading, subprocess, time
+import numpy, socket, json, os, pathlib, threading, subprocess, time, functools
 from queue import PriorityQueue
 from datetime import datetime
 from dataclasses import dataclass
@@ -70,7 +70,7 @@ class Logger:
             if self.queue.empty():  time.sleep(.5); continue
             item = self.queue.get()
             skip = False if item.replace else True
-            table = rgetattr(self._schemata[item.schema], item.table)
+            table = self.rgetattr(self._schemata[item.schema], item.table)
             self.thread_lock.acquire()
             try:
                 table.insert1(item.tuple, ignore_extra_fields=item.ignore_extra_fields,
