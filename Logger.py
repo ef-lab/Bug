@@ -197,9 +197,9 @@ class Light(dj.Manual):
     -> common.Room
     tmst                     : timestamp                    # measurement timestamp
     ---
-    R_lumens             : float            # in cd per sqm
-    G_lumens             : float            # in cd per sqm
-    B_lumens             : float            # in cd per sqm
+    r_lumens             : float            # in cd per sqm
+    g_lumens             : float            # in cd per sqm
+    b_lumens             : float            # in cd per sqm
     trigger="time"           : enum('light')    # Trigger 
     """
 
@@ -211,6 +211,6 @@ class Camera(dj.Manual):
     -> common.Room
     tmst                     : timestamp                    # measurement timestamp
     --- 
-    image             : mediumblob            # in %
+    image             : mediumblob            # in Image  uint8 format
     trigger="time"           : enum('time', 'motion', 'light', 'sound')    # Trigger 
     """
