@@ -6,7 +6,7 @@ class MotionSensor:
     def __init__(self):
         self.motion_trigger = False
         self.GPIO = GPIO
-        self.GPIO.setmode(self.GPIO.BOARD)  # Set GPIO pin numbering
+        self.GPIO.setmode(self.GPIO.BCM)  # Set GPIO pin numbering
         pir = 26  # Associate pin 26 to pir
         self.GPIO.setup(pir, self.GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
