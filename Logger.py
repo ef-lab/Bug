@@ -33,6 +33,7 @@ class Timer:
     def add_delay(self, sec):
         self.start_time += sec
 
+
 class Logger:
     trial_key, setup_info, _schemata, datasets = dict(animal_id=0, session=1, trial_idx=0), dict(), dict(), dict()
     lock, queue, ping_timer, logger_timer, total_reward, curr_state = False, PriorityQueue(), Timer(), Timer(), 0, ''
@@ -48,11 +49,8 @@ class Logger:
             self._schemata.update({schema: dj.create_virtual_module(schema, value, connection=self.private_conn)})
         self.thread_end, self.thread_lock = threading.Event(), threading.Lock()
         self.inserter_thread = threading.Thread(target=self.inserter)
-        self.getter_thread = threading.Thread(target=self.getter)
         self.inserter_thread.start()
-        self.getter_thread.start()
         self.logger_timer.start()
-        self.Writer = Writer
 
     def setup_schema(self, extra_schema):
         for schema, value in extra_schema.items():
@@ -90,36 +88,8 @@ class Logger:
             self.thread_lock.release()
             if item.block: self.queue.task_done()
 
-    def getter(self):
-        while not self.thread_end.is_set():
-            self.thread_lock.acquire()
-            self.setup_info = (self._schemata['experiment'].Control() & dict(setup=self.setup)).fetch1()
-            self.thread_lock.release()
-            self.setup_status = self.setup_info['status']
-            time.sleep(1)  # update once a second
-
     def log(self, table, data=dict(), **kwargs):
-        tmst = self.logger_timer.elapsed_time()
-        self.put(table=table, tuple={**self.trial_key, 'time': tmst, **data}, **kwargs)
-        if self.manual_run and table == 'Trial.StateOnset': print('State: ', data['state'])
-        return tmst
-
-    def update_setup_info(self, info, key=dict()):
-        self.setup_info = {**(experiment.Control() & {**{'setup': self.setup}, **key}).fetch1(), **info}
-        block = True if 'status' in info else False
-        self.put(table='Control', tuple=self.setup_info, replace=True, priority=1, block=block, validate=block)
-        self.setup_status = self.setup_info['status']
-
-    def get(self, schema='experiment', table='Control', fields='', key=dict(), **kwargs):
-        table = rgetattr(eval(schema), table)
-        return (table() & key).fetch(*fields, **kwargs)
-
-    def ping(self, period=5000):
-        if self.ping_timer.elapsed_time() >= period:  # occasionally update control table
-            self.ping_timer.start()
-            self.update_setup_info({'last_ping': str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
-                                    'queue_size': self.queue.qsize(), 'trials': self.trial_key['trial_idx'],
-                                    'total_liquid': self.total_reward, 'state': self.curr_state})
+        self.put(table=table, tuple=data, **kwargs)
 
     def cleanup(self):
         while not self.queue.empty(): print('Waiting for empty queue... qsize: %d' % self.queue.qsize()); time.sleep(1)
