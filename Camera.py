@@ -17,19 +17,22 @@ class BugEye:
         sleep(2)
 
     def capture(self):
-        self.camera.exposure_mode = 'off'
-        self.camera.capture(self.stream, format='rgb')
         self.get_exposure()
         if self.cur_lum > self.prev_lum * 1.5 or self.cur_lum < self.prev_lum * .5 and self.prev_lum > 0:
             self.light_trigger = True
-        self.camera.exposure_mode = 'auto'
-        self.prev_lum = self.cur_lum
 
     def get_exposure(self, channel=0):
+        self.camera.exposure_mode = 'off'
+        self.camera.capture(self.stream, format='rgb')
+
         ss = self.camera.exposure_speed
         gain = float(self.camera.analog_gain) * float(self.camera.digital_gain)
         RGB = self.stream.array
         self.cur_lum = self.exp2lum(ss, gain, np.average(RGB[..., channel]))
+
+        self.camera.exposure_mode = 'auto'
+        self.prev_lum = self.cur_lum
+
         return ss, gain, RGB
 
     def estimate_channel_luminance(self):
