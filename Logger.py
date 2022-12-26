@@ -162,7 +162,7 @@ class PrioritizedItem:
 class Temperature(dj.Manual):
     definition = """
     # room temperature
-    -> common.room
+    -> common.Room
     tmst                     : timestamp                    # measurement timestamp
     ---
     celcius                  : float                        # in celcius
@@ -173,7 +173,7 @@ class Temperature(dj.Manual):
 class Humidity(dj.Manual):
     definition = """
     # room temperature
-    -> common.room
+    -> common.Room
     tmst                     : timestamp                    # measurement timestamp
     ---
     relative_humidity             : float            # in percent
@@ -184,7 +184,7 @@ class Humidity(dj.Manual):
 class Motion(dj.Manual):
     definition = """
     # room temperature
-    -> common.room
+    -> common.Room
     tmst                     : timestamp                    # measurement timestamp
     ---
     """
@@ -194,7 +194,7 @@ class Motion(dj.Manual):
 class Light(dj.Manual):
     definition = """
     # room temperature
-    -> common.room
+    -> common.Room
     tmst                     : timestamp                    # measurement timestamp
     ---
     R_lumens             : float            # in cd per sqm
@@ -208,7 +208,7 @@ class Light(dj.Manual):
 class Camera(dj.Manual):
     definition = """
     # room temperature
-    -> common.room
+    -> common.Room
     tmst                     : timestamp                    # measurement timestamp
     --- 
     image             : mediumblob            # in %
