@@ -24,8 +24,6 @@ class BugEye:
             self.light_trigger = True
         self.camera.exposure_mode = 'auto'
         self.prev_lum = self.cur_lum
-        self.stream.truncate()
-        self.stream.seek(0)
 
     def get_exposure(self, channel=0):
         ss = self.camera.exposure_speed
