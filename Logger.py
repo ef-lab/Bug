@@ -40,7 +40,7 @@ class Logger:
     def __init__(self):
         self.setup = socket.gethostname()
         self.is_pi = os.uname()[4][:3] == 'arm' if os.name == 'posix' else False
-        fileobject = open(os.path.dirname(os.path.abspath(__file__)) + 'dj_local_conf.json')
+        fileobject = open(os.path.dirname(os.path.abspath(__file__)) + '/dj_local_conf.json')
         con_info = json.loads(fileobject.read())
         self.private_conn = dj.Connection(con_info['database.host'], con_info['database.user'],
                                           con_info['database.password'])
