@@ -2,6 +2,7 @@ import picamera
 import picamera.array
 import numpy as np
 from time import sleep
+from PIL import Image
 
 
 class BugEye:
@@ -42,11 +43,15 @@ class BugEye:
         return RL, GL, BL
 
     def snapshot(self):
-        self.camera.capture(self.stream, 'jpeg', bayer=True)
-        output = (self.stream.demosaic() >> 2).astype(np.uint8)
-        #with open('/mnt/lab/users/manolis/bayer.jpg', 'wb') as f:
-        #    output.tofile(f)
+        array = self.stream.array
+        output = Image.fromarray(array.astype('uint8'), 'RGB')
         return output
+
+    def save_jpeg(self, file='image', array=False):
+        if not array:
+            array = self.stream.array
+        image = Image.fromarray(array.astype('uint8'), 'RGB')
+        image.save(file + ".jpg")
 
     def light_change_detected(self):
         if self.light_trigger:
