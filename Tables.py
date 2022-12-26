@@ -1,3 +1,6 @@
+from Logger import *
+
+
 @monitoring.schema
 class Temperature(dj.Manual):
     definition = """
