@@ -200,7 +200,7 @@ class Light(dj.Manual):
     r_lumens             : float            # in cd per sqm
     g_lumens             : float            # in cd per sqm
     b_lumens             : float            # in cd per sqm
-    trigger="time"           : enum('light')    # Trigger 
+    trigger="time"           : enum('time', 'light')    # Trigger 
     """
 
 
