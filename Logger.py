@@ -14,6 +14,7 @@ schemata = {'common': 'lab_common',
 for schema, value in schemata.items():  # separate connection for internal comminication
     globals()[schema] = dj.create_virtual_module(schema, value, create_tables=True, create_schema=True)
 
+from Tables import *
 
 class Timer:
     """ This is a timer that is used for the state system
