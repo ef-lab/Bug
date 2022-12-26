@@ -31,15 +31,15 @@ class Motion(dj.Manual):
 
 
 @monitoring.schema
-class Light(dj.Manual):
+class Luminance(dj.Manual):
     definition = """
     # room temperature
     -> common.Room
     tmst                     : timestamp                    # measurement timestamp
     ---
-    r_lumens             : float            # in cd per sqm
-    g_lumens             : float            # in cd per sqm
-    b_lumens             : float            # in cd per sqm
+    r_channel             : float            # in cd per sqm
+    g_channel             : float            # in cd per sqm
+    b_channel             : float            # in cd per sqm
     trigger="time"           : enum('time', 'light')    # Trigger 
     """
 

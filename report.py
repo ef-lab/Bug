@@ -23,8 +23,8 @@ while True:
         logger.log('Humidity', key, schema='monitoring', priority=10)
 
         RL, GL, BL = cam.estimate_channel_luminance()
-        key = dict(room_id=room, tmst=tmst, r_luminance=RL, g_luminance=GL, b_luminance=BL, trigger='time')
-        logger.log('Light', key, schema='monitoring', priority=10)
+        key = dict(room_id=room, tmst=tmst, r_channel=RL, g_channel=GL, b_channel=BL, trigger='time')
+        logger.log('Luminance', key, schema='monitoring', priority=10)
 
         # restart timer
         log_timer.start()
@@ -45,8 +45,8 @@ while True:
 
     if cam.light_change_detected():
         RL, GL, BL = cam.estimate_channel_luminance()
-        key = dict(room_id=room, tmst=tmst, r_luminance=RL, g_luminance=GL, b_luminance=BL, trigger='light')
-        logger.log('Light', key, schema='monitoring', priority=10)
+        key = dict(room_id=room, tmst=tmst, r_channel=RL, g_channel=GL, b_channel=BL, trigger='light')
+        logger.log('Luminance', key, schema='monitoring', priority=10)
 
     time.sleep(.1)
 
