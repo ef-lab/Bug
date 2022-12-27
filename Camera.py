@@ -13,7 +13,7 @@ class BugEye:
         self.camera = picamera.PiCamera()
         self.stream = picamera.array.PiRGBArray(self.camera)
         self.camera.exposure_mode = 'auto'
-        self.camera.awb_mode = 'sunlight'
+        self.camera.awb_mode = 'auto'
         self.light_trigger = False
         self.timer = Timer()
         self.get_exposure()
@@ -21,10 +21,9 @@ class BugEye:
         sleep(2)
 
     def light_change_detection(self):
-        print('camera timer: ', self.timer.elapsed_time() )
         if self.timer.elapsed_time() > 1000:
             self.get_exposure()
-            if self.cur_lum > self.prev_lum * 1.005 or self.cur_lum < self.prev_lum * .995 and self.prev_lum > 0:
+            if self.cur_lum > self.prev_lum * 1.5 or self.cur_lum < self.prev_lum * .5 and self.prev_lum > 0:
                 self.light_trigger = True
                 print('Light Change detected!')
             self.timer.start()
