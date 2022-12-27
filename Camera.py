@@ -1,4 +1,4 @@
-import picamera, io, threading
+import picamera, io
 import picamera.array
 import numpy as np
 from time import sleep
@@ -9,18 +9,16 @@ from Timer import Timer
 class BugEye:
 
     def __init__(self):
-        #self.capture_thread = threading.Thread(target=self.light_change_detection)
         self.prev_lum = 0
         self.camera = picamera.PiCamera()
         self.stream = picamera.array.PiRGBArray(self.camera)
         self.camera.exposure_mode = 'auto'
-        self.camera.awb_mode = 'auto'
+        self.camera.awb_mode = 'sunlight'
         self.light_trigger = False
         self.timer = Timer()
         self.get_exposure()
         print("Initializing Pi Camera")
         sleep(2)
-        #self.capture_thread.start()
 
     def light_change_detection(self):
         print('camera timer: ', self.timer.elapsed_time() )
@@ -30,31 +28,28 @@ class BugEye:
                 self.light_trigger = True
                 print('Light Change detected!')
             self.timer.start()
+            self.prev_lum = self.cur_lum
 
     def get_exposure(self, channel=0):
         self.camera.exposure_mode = 'off'
         self.camera.capture(self.stream, format='rgb')
-
         self.ss = self.camera.exposure_speed
         self.gain = float(self.camera.analog_gain) * float(self.camera.digital_gain)
         self.RGB = self.stream.array
         self.cur_lum = self.exp2lum(self.ss, self.gain, np.average(self.RGB[..., channel]))
         print('SS: ', self.ss, ' Gain: ', self.gain)
         self.camera.exposure_mode = 'auto'
-        self.prev_lum = self.cur_lum
         self.stream.truncate()
         self.stream.seek(0)
 
     def estimate_channel_luminance(self):
         sleep(1)
-        #ss, gain, RGB = self.get_exposure()
         RL = self.exp2lum(self.ss, self.gain, np.average(self.RGB[..., 0]))
         GL = self.exp2lum(self.ss, self.gain, np.average(self.RGB[..., 1]))
         BL = self.exp2lum(self.ss, self.gain, np.average(self.RGB[..., 2]))
         return RL, GL, BL
 
     def snapshot(self):
-        #ss, gain, array = self.get_exposure()
         img = Image.fromarray(self.RGB.astype('uint8'), 'RGB')
         img_byte_arr = io.BytesIO()
         img.save(img_byte_arr, format='PNG')
