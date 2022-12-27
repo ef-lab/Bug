@@ -32,6 +32,8 @@ class BugEye:
 
         self.camera.exposure_mode = 'auto'
         self.prev_lum = self.cur_lum
+        self.stream.truncate()
+        self.stream.seek(0)
 
         return ss, gain, RGB
 
@@ -44,8 +46,7 @@ class BugEye:
         return RL, GL, BL
 
     def snapshot(self):
-        self.get_exposure()
-        array = self.stream.array
+        ss, gain, array = self.get_exposure()
         img = Image.fromarray(array.astype('uint8'), 'RGB')
         img_byte_arr = io.BytesIO()
         img.save(img_byte_arr, format='PNG')
@@ -58,9 +59,6 @@ class BugEye:
             img = Image.open(stream)
         image = Image.fromarray(array.astype('uint8'), 'RGB')
         image.save(file + ".jpg")
-
-    def read_jpeg(self, img_byte_array):
-
 
     def light_change_detected(self):
         if self.light_trigger:
