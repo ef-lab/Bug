@@ -7,6 +7,7 @@ from Timer import Timer
 
 
 class BugEye:
+
     def __init__(self):
         self.capture_thread = threading.Thread(target=self.light_change_detection)
         self.prev_lum = 0
@@ -16,6 +17,7 @@ class BugEye:
         self.camera.awb_mode = 'auto'
         self.light_trigger = False
         self.timer = Timer()
+        self.get_exposure()
         print("Initializing Pi Camera")
         sleep(2)
         self.capture_thread.start()
