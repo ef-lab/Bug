@@ -25,34 +25,33 @@ class BugEye:
             self.get_exposure()
             if self.cur_lum > self.prev_lum * 1.5 or self.cur_lum < self.prev_lum * .5 and self.prev_lum > 0:
                 self.light_trigger = True
+            self.timer.start()
 
     def get_exposure(self, channel=0):
         self.camera.exposure_mode = 'off'
         self.camera.capture(self.stream, format='rgb')
 
-        ss = self.camera.exposure_speed
-        gain = float(self.camera.analog_gain) * float(self.camera.digital_gain)
-        RGB = self.stream.array
-        self.cur_lum = self.exp2lum(ss, gain, np.average(RGB[..., channel]))
+        self.ss = self.camera.exposure_speed
+        self.gain = float(self.camera.analog_gain) * float(self.camera.digital_gain)
+        self.RGB = self.stream.array
+        self.cur_lum = self.exp2lum(self.ss, self.gain, np.average(self.RGB[..., channel]))
 
         self.camera.exposure_mode = 'auto'
         self.prev_lum = self.cur_lum
         self.stream.truncate()
         self.stream.seek(0)
 
-        return ss, gain, RGB
-
     def estimate_channel_luminance(self):
         sleep(1)
-        ss, gain, RGB = self.get_exposure()
-        RL = self.exp2lum(ss, gain, np.average(RGB[..., 0]))
-        GL = self.exp2lum(ss, gain, np.average(RGB[..., 1]))
-        BL = self.exp2lum(ss, gain, np.average(RGB[..., 2]))
+        #ss, gain, RGB = self.get_exposure()
+        RL = self.exp2lum(self.ss, self.gain, np.average(self.RGB[..., 0]))
+        GL = self.exp2lum(self.ss, self.gain, np.average(self.RGB[..., 1]))
+        BL = self.exp2lum(self.ss, self.gain, np.average(self.RGB[..., 2]))
         return RL, GL, BL
 
     def snapshot(self):
-        ss, gain, array = self.get_exposure()
-        img = Image.fromarray(array.astype('uint8'), 'RGB')
+        #ss, gain, array = self.get_exposure()
+        img = Image.fromarray(self.RGB.astype('uint8'), 'RGB')
         img_byte_arr = io.BytesIO()
         img.save(img_byte_arr, format='PNG')
         output = img_byte_arr.getvalue()
