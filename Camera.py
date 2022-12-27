@@ -1,25 +1,29 @@
-import picamera, io
+import picamera, io, threading
 import picamera.array
 import numpy as np
 from time import sleep
 from PIL import Image
+from Timer import Timer
 
 
 class BugEye:
     def __init__(self):
+        self.capturee_thread = threading.Thread(target=self.light_change_detection)
         self.prev_lum = 0
         self.camera = picamera.PiCamera()
         self.stream = picamera.array.PiRGBArray(self.camera)
         self.camera.exposure_mode = 'auto'
         self.camera.awb_mode = 'auto'
         self.light_trigger = False
+        self.timer = Timer()
         print("Initializing Pi Camera")
         sleep(2)
 
-    def capture(self):
-        self.get_exposure()
-        if self.cur_lum > self.prev_lum * 1.5 or self.cur_lum < self.prev_lum * .5 and self.prev_lum > 0:
-            self.light_trigger = True
+    def light_change_detection(self):
+        if self.timer.elapsed_time() > 1000:
+            self.get_exposure()
+            if self.cur_lum > self.prev_lum * 1.5 or self.cur_lum < self.prev_lum * .5 and self.prev_lum > 0:
+                self.light_trigger = True
 
     def get_exposure(self, channel=0):
         self.camera.exposure_mode = 'off'
