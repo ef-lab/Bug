@@ -8,7 +8,7 @@ from Timer import Timer
 
 class BugEye:
     def __init__(self):
-        self.capturee_thread = threading.Thread(target=self.light_change_detection)
+        self.capture_thread = threading.Thread(target=self.light_change_detection)
         self.prev_lum = 0
         self.camera = picamera.PiCamera()
         self.stream = picamera.array.PiRGBArray(self.camera)
@@ -18,6 +18,7 @@ class BugEye:
         self.timer = Timer()
         print("Initializing Pi Camera")
         sleep(2)
+        self.capture_thread.start()
 
     def light_change_detection(self):
         if self.timer.elapsed_time() > 1000:

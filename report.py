@@ -3,7 +3,7 @@ from Camera import *
 from THSensor import *
 from MotionSensor import *
 
-log_interval = 3600  # interval in seconds
+log_interval = 10  # interval in seconds
 room = "A000"
 
 logger = Logger()

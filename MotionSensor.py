@@ -4,7 +4,7 @@ import RPi.GPIO as GPIO  # Import GPIO library
 
 class MotionSensor:
     def __init__(self):
-        self.motion_trigger = False
+        self.motion_trigger = True
         self.GPIO = GPIO
         self.GPIO.setmode(self.GPIO.BCM)  # Set GPIO pin numbering
         pir = 26  # Associate pin 26 to pir
