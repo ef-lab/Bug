@@ -43,6 +43,7 @@ while True:
         key = dict(room_id=room, tmst=tmst)
         logger.log('Motion', key, schema='monitoring', priority=10)
 
+    cam.light_change_detection()
     if cam.light_change_detected():
         RL, GL, BL = cam.estimate_channel_luminance()
         key = dict(room_id=room, tmst=tmst, r_channel=RL, g_channel=GL, b_channel=BL, trigger='light')
