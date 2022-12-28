@@ -57,12 +57,6 @@ class BugEye:
         output = img_byte_arr.getvalue()
         return output
 
-    def save_jpeg(self, array, file='image' ):
-        stream = io.BytesIO(array)
-        img = Image.open(stream)
-        #image = Image.fromarray(array.astype('uint8'), 'RGB')
-        img.save(file + ".jpg")
-
     def light_change_detected(self):
         if self.light_trigger:
             self.light_trigger = False

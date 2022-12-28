@@ -1,4 +1,6 @@
 from Logger import *
+from PIL import Image
+import io
 
 
 @monitoring.schema
@@ -57,3 +59,8 @@ class Camera(dj.Manual):
     image             : mediumblob            # in Image  uint8 format
     trigger="time"           : enum('time', 'motion', 'light', 'sound')    # Trigger 
     """
+
+    def save_jpeg(self, file='image'):
+        array, tmst, room_id = self.fetch1('image', 'tmst', 'room_id')
+        img = Image.open(io.BytesIO(array))
+        img.save(room_id + '_' + tmst + ".jpg")
