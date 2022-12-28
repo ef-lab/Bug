@@ -15,13 +15,14 @@ class BugEye:
         self.camera.exposure_mode = 'auto'
         self.camera.awb_mode = 'auto'
         self.light_trigger = False
-        self.timer = Timer(1000)
+        self.timer = Timer(1001)
         self.exposure_thread = threading.Thread(target=self.light_change_detection)
         self.exposure_thread.start()
         print("Initializing Pi Camera")
         sleep(2)
 
     def light_change_detection(self):
+        print('Light Detection')
         if self.timer.elapsed_time() > 1000:
             self.get_exposure()
             if self.cur_lum > self.prev_lum * 1.5 or self.cur_lum < self.prev_lum * .5 and self.prev_lum > 0:
