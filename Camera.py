@@ -11,6 +11,7 @@ class BugEye:
     def __init__(self):
         self.prev_lum = 0
         self.camera = picamera.PiCamera()
+        self.camera.resolution = (320, 240)
         self.stream = picamera.array.PiRGBArray(self.camera)
         self.camera.exposure_mode = 'auto'
         self.camera.awb_mode = 'auto'
