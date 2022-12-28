@@ -2,7 +2,12 @@
 import time
 import board
 import adafruit_dht
+import psutil
 
+# We first check if a libgpiod process is running. If yes, we kill it!
+for proc in psutil.process_iter():
+    if proc.name() == 'libgpiod_pulsein' or proc.name() == 'libgpiod_pulsei':
+        proc.kill()
 
 class THSensor:
     def __init__(self):
@@ -16,11 +21,11 @@ class THSensor:
                 h = self.dhtDevice.humidity
             except RuntimeError as error:
                 # Errors happen fairly often, DHT's are hard to read, just keep going
-                time.sleep(1.0)
                 continue
             except Exception as error:
                 self.dhtDevice.exit()
                 raise error
+            time.sleep(2.0)
         return h
 
     def get_temperature(self):
@@ -30,11 +35,11 @@ class THSensor:
                 t = self.dhtDevice.temperature
             except RuntimeError as error:
                 # Errors happen fairly often, DHT's are hard to read, just keep going
-                time.sleep(1.0)
                 continue
             except Exception as error:
                 self.dhtDevice.exit()
                 raise error
+            time.sleep(2.0)
         return t
 
     def exit(self):
