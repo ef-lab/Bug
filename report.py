@@ -2,18 +2,20 @@ from Logger import *
 from Camera import *
 from THSensor import *
 from MotionSensor import *
+import socket
 
-log_interval = 10  # interval in seconds
+log_interval = 3600  # interval in seconds
 motion_interval = 60  # motion detection interval in seconds
-room = "A000"
 
 logger = Logger()
 cam = BugEye()
 ths = THSensor()
 mot = MotionSensor()
-log_timer = Timer()
-motion_timer = Timer()
+log_timer = Timer(offset=log_interval+1)
+motion_timer = Timer(offset=motion_interval+1)
 time.sleep(2)
+
+room = (common.Computer & {'full_name': socket.gethostname()}).fetch1('room_id')
 
 while True:
     if log_timer.elapsed_time() > log_interval*1000:

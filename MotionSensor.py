@@ -5,7 +5,7 @@ from Timer import Timer
 
 class MotionSensor:
     def __init__(self):
-        self.motion_trigger = True
+        self.motion_trigger = False
         self.GPIO = GPIO
         self.timer = Timer()
         self.GPIO.setmode(self.GPIO.BCM)  # Set GPIO pin numbering
