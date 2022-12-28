@@ -11,8 +11,6 @@ class MotionSensor:
         self.GPIO.setmode(self.GPIO.BCM)  # Set GPIO pin numbering
         pir = 26  # Associate pin 26 to pir
         self.GPIO.setup(pir, self.GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-
-    def setup_callback(self):
         self.GPIO.add_event_detect(pir, self.GPIO.RISING,
                                    callback=self._motion_detection, bouncetime=200)
 
