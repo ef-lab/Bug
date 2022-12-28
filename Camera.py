@@ -37,7 +37,7 @@ class BugEye:
         self.gain = float(self.camera.analog_gain) * float(self.camera.digital_gain)
         self.camera.capture(self.stream, format='rgb')
         self.RGB = self.stream.array
-        self.cur_lum = self.exp2lum(self.ss, self.gain, np.average(self.RGB[..., channel]))
+        self.cur_lum = self.exp2lum(self.ss, self.gain, np.average(self.RGB[...]))
         print('SS: ', self.ss, ' Gain: ', self.gain, ' Pix value: ', np.average(self.RGB[..., channel]), ' Lum: ', self.cur_lum)
         self.camera.exposure_mode = 'auto'
         self.stream.truncate()

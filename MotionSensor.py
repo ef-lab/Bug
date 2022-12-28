@@ -1,11 +1,13 @@
 ## MOTION
 import RPi.GPIO as GPIO  # Import GPIO library
+from Timer import Timer
 
 
 class MotionSensor:
     def __init__(self):
         self.motion_trigger = True
         self.GPIO = GPIO
+        self.timer = Timer()
         self.GPIO.setmode(self.GPIO.BCM)  # Set GPIO pin numbering
         pir = 26  # Associate pin 26 to pir
         self.GPIO.setup(pir, self.GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
@@ -21,6 +23,7 @@ class MotionSensor:
         return False
 
     def _motion_detection(self):
+        print('Motion Detected!')
         self.motion_trigger = True
 
     def exit(self):

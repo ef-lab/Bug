@@ -11,6 +11,7 @@ cam = BugEye()
 ths = THSensor()
 mot = MotionSensor()
 log_timer = Timer()
+motion_timer = Timer()
 time.sleep(2)
 
 while True:
@@ -30,7 +31,7 @@ while True:
         # restart timer
         log_timer.start()
 
-    if mot.motion_detected():
+    if mot.motion_detected() and motion_timer.elapsed_time() > 60000:
         tmst = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
         # capture image
@@ -43,6 +44,7 @@ while True:
         # log motion
         key = dict(room_id=room, tmst=tmst)
         logger.log('Motion', key, schema='monitoring', priority=10)
+        motion_timer.start()
 
     cam.light_change_detection()
     if cam.light_change_detected():
