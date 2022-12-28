@@ -53,16 +53,15 @@ class BugEye:
     def snapshot(self):
         img = Image.fromarray(self.RGB.astype('uint8'), 'RGB')
         img_byte_arr = io.BytesIO()
-        img.save(img_byte_arr, format='PNG')
+        img.save(img_byte_arr, format='JPG')
         output = img_byte_arr.getvalue()
         return output
 
-    def save_jpeg(self, file='image', array=False):
-        if not array:
-            stream = io.BytesIO(array)
-            img = Image.open(stream)
-        image = Image.fromarray(array.astype('uint8'), 'RGB')
-        image.save(file + ".jpg")
+    def save_jpeg(self, array, file='image' ):
+        stream = io.BytesIO(array)
+        img = Image.open(stream)
+        #image = Image.fromarray(array.astype('uint8'), 'RGB')
+        img.save(file + ".jpg")
 
     def light_change_detected(self):
         if self.light_trigger:
