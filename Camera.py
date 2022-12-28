@@ -23,16 +23,13 @@ class BugEye:
         sleep(2)
 
     def light_change_detection(self):
-        print('Light Detection 1')
         if self.timer.elapsed_time() > 1000:
-            print('Light Detection 2')
             self.get_exposure()
             if self.cur_lum > self.prev_lum * 1.5 or self.cur_lum < self.prev_lum * .5 and self.prev_lum > 0:
                 self.light_trigger = True
                 print('Light Change detected!')
             self.timer.start()
             self.prev_lum = self.cur_lum
-        print('No change')
 
     def get_exposure(self, channel=0):
         self.camera.exposure_mode = 'off'
@@ -41,7 +38,7 @@ class BugEye:
         self.camera.capture(self.stream, format='rgb')
         self.RGB = self.stream.array
         self.cur_lum = self.exp2lum(self.ss, self.gain, np.average(self.RGB[..., channel]))
-        print('SS: ', self.ss, ' Gain: ', self.gain, ' Pix value: ', np.average(self.RGB[..., channel]))
+        print('SS: ', self.ss, ' Gain: ', self.gain, ' Pix value: ', np.average(self.RGB[..., channel]), ' Lum: ', self.cur_lum)
         self.camera.exposure_mode = 'auto'
         self.stream.truncate()
         self.stream.seek(0)
