@@ -6,9 +6,10 @@ class Timer:
     time is in milliseconds
     """
     def __init__(self, offset=0):
-        self.start_time = offset
+        self.start_time = 0
         self.time = time.time
         self.start()
+        self.start_time = self.start_time+offset
 
     def start(self):
         self.start_time = self.time()

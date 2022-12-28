@@ -22,8 +22,8 @@ class BugEye:
         sleep(2)
 
     def light_change_detection(self):
-        print('Light Detection')
         if self.timer.elapsed_time() > 1000:
+            print('Light Detection')
             self.get_exposure()
             if self.cur_lum > self.prev_lum * 1.5 or self.cur_lum < self.prev_lum * .5 and self.prev_lum > 0:
                 self.light_trigger = True
