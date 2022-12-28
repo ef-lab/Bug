@@ -49,7 +49,7 @@ while True:
         logger.log('Motion', key, schema='monitoring', priority=10)
         motion_timer.start()
 
-    #cam.light_change_detection()
+    cam.light_change_detection()
     if cam.light_change_detected():
         tmst = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         RL, GL, BL = cam.estimate_channel_luminance()
