@@ -48,6 +48,7 @@ while True:
 
     cam.light_change_detection()
     if cam.light_change_detected():
+        tmst = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         RL, GL, BL = cam.estimate_channel_luminance()
         key = dict(room_id=room, tmst=tmst, r_channel=RL, g_channel=GL, b_channel=BL, trigger='light')
         logger.log('Luminance', key, schema='monitoring', priority=10)
