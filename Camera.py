@@ -1,4 +1,4 @@
-import picamera, io
+import picamera, io, threading
 import picamera.array
 import numpy as np
 from time import sleep
@@ -15,8 +15,9 @@ class BugEye:
         self.camera.exposure_mode = 'auto'
         self.camera.awb_mode = 'auto'
         self.light_trigger = False
-        self.timer = Timer()
-        self.get_exposure()
+        self.timer = Timer(1000)
+        self.exposure_thread = threading.Thread(target=self.light_change_detection)
+        self.exposure_thread.start()
         print("Initializing Pi Camera")
         sleep(2)
 
@@ -31,18 +32,17 @@ class BugEye:
 
     def get_exposure(self, channel=0):
         self.camera.exposure_mode = 'off'
-        self.camera.capture(self.stream, format='rgb')
         self.ss = self.camera.exposure_speed
         self.gain = float(self.camera.analog_gain) * float(self.camera.digital_gain)
+        self.camera.capture(self.stream, format='rgb')
         self.RGB = self.stream.array
         self.cur_lum = self.exp2lum(self.ss, self.gain, np.average(self.RGB[..., channel]))
-        print('SS: ', self.ss, ' Gain: ', self.gain)
+        print('SS: ', self.ss, ' Gain: ', self.gain, ' Pix value: ', np.average(self.RGB[..., channel]))
         self.camera.exposure_mode = 'auto'
         self.stream.truncate()
         self.stream.seek(0)
 
     def estimate_channel_luminance(self):
-        sleep(1)
         RL = self.exp2lum(self.ss, self.gain, np.average(self.RGB[..., 0]))
         GL = self.exp2lum(self.ss, self.gain, np.average(self.RGB[..., 1]))
         BL = self.exp2lum(self.ss, self.gain, np.average(self.RGB[..., 2]))

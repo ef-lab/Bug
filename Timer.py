@@ -5,8 +5,8 @@ class Timer:
     """ This is a timer that is used for the state system
     time is in milliseconds
     """
-    def __init__(self):
-        self.start_time = 0
+    def __init__(self, offset=0):
+        self.start_time = offset
         self.time = time.time
         self.start()
 
