@@ -4,6 +4,7 @@ from THSensor import *
 from MotionSensor import *
 
 log_interval = 10  # interval in seconds
+motion_interval = 60  # motion detection interval in seconds
 room = "A000"
 
 logger = Logger()
@@ -31,7 +32,7 @@ while True:
         # restart timer
         log_timer.start()
 
-    if mot.motion_detected() and motion_timer.elapsed_time() > 60000:
+    if mot.motion_detected() and motion_timer.elapsed_time() > motion_interval*1000:
         tmst = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
         # capture image

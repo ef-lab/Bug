@@ -14,7 +14,7 @@ class BugEye:
         self.camera.resolution = (320, 240)
         self.stream = picamera.array.PiRGBArray(self.camera)
         self.camera.exposure_mode = 'auto'
-        self.camera.awb_mode = 'auto'
+        self.camera.awb_mode = 'fluorescent'
         print("Initializing Pi Camera")
         sleep(2)
         self.light_trigger = False
@@ -72,6 +72,6 @@ class BugEye:
 
     @staticmethod
     def exp2lum(ss, gain, px):  # convert exposure to lumens
-        EV = np.power(px / 128, 2.2) * np.log2((4000000 / ss) * (1.848 / gain))
+        EV = np.power(px / 128, 1.8) * np.log2((4000000 / ss) * (1.848 / gain))
         return np.power(2, EV) / 8 if EV >= 0 else 1 / np.power(2, EV) / 8
 
