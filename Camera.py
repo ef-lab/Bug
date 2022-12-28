@@ -53,7 +53,7 @@ class BugEye:
     def snapshot(self):
         img = Image.fromarray(self.RGB.astype('uint8'), 'RGB')
         img_byte_arr = io.BytesIO()
-        img.save(img_byte_arr, format='JPG')
+        img.save(img_byte_arr, format='JPEG')
         output = img_byte_arr.getvalue()
         return output
 
