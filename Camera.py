@@ -14,11 +14,12 @@ class BugEye:
         self.stream = picamera.array.PiRGBArray(self.camera)
         self.camera.exposure_mode = 'auto'
         self.camera.awb_mode = 'auto'
+        print("Initializing Pi Camera")
+        sleep(2)
         self.light_trigger = False
         self.timer = Timer(1001)
         self.exposure_thread = threading.Thread(target=self.light_change_detection)
         self.exposure_thread.start()
-        print("Initializing Pi Camera")
         sleep(2)
 
     def light_change_detection(self):
