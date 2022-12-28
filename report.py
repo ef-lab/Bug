@@ -11,6 +11,7 @@ cam = BugEye()
 ths = THSensor()
 mot = MotionSensor()
 log_timer = Timer()
+time.sleep(2)
 
 while True:
     if log_timer.elapsed_time() > log_interval*1000:

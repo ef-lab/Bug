@@ -9,7 +9,7 @@ class Timer:
         self.start_time = 0
         self.time = time.time
         self.start()
-        self.start_time = self.start_time+offset
+        self.start_time = self.start_time+offset/1000
 
     def start(self):
         self.start_time = self.time()
