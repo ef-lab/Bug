@@ -56,5 +56,5 @@ while True:
         key = dict(room_id=room, tmst=tmst, r_channel=RL, g_channel=GL, b_channel=BL, trigger='light')
         logger.log('Luminance', key, schema='monitoring', priority=10)
 
-    time.sleep(.1)
+    time.sleep(.5)
 

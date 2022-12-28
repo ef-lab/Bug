@@ -12,7 +12,7 @@ class MotionSensor:
         pir = 26  # Associate pin 26 to pir
         self.GPIO.setup(pir, self.GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         self.GPIO.add_event_detect(pir, self.GPIO.RISING,
-                                   callback=self._motion_detection, bouncetime=200)
+                                   callback=self._motion_detection, bouncetime=1000)
 
     def motion_detected(self):
         if self.motion_trigger:
