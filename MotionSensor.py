@@ -20,7 +20,7 @@ class MotionSensor:
             return True
         return False
 
-    def _motion_detection(self):
+    def _motion_detection(self, channel):
         print('Motion Detected!')
         self.motion_trigger = True
 
