@@ -15,7 +15,7 @@ log_timer = Timer(offset=log_interval+1)
 motion_timer = Timer(offset=motion_interval+1)
 time.sleep(2)
 
-room = (common.Computer & {'full_name': socket.gethostname()}).fetch1('room_id')
+room = (common.Computer & {'hostname': socket.gethostname()}).fetch1('room_id')
 
 while True:
     if log_timer.elapsed_time() > log_interval*1000:
