@@ -8,23 +8,24 @@ from Timer import Timer
 
 class BugEye:
 
-    def __init__(self):
+    def __init__(self, interval=5000, resolution=(320, 240)):
         self.prev_lum = 0
+        self.interval = interval
         self.camera = picamera.PiCamera()
-        self.camera.resolution = (320, 240)
+        self.camera.resolution = resolution
         self.stream = picamera.array.PiRGBArray(self.camera)
         self.camera.exposure_mode = 'auto'
         self.camera.awb_mode = 'fluorescent'
         print("Initializing Pi Camera")
         sleep(2)
         self.light_trigger = False
-        self.timer = Timer(1001)
+        self.timer = Timer(interval+1)
         self.exposure_thread = threading.Thread(target=self.light_change_detection)
         self.exposure_thread.start()
         sleep(2)
 
     def light_change_detection(self):
-        if self.timer.elapsed_time() > 1000:
+        if self.timer.elapsed_time() > self.interval:
             self.get_exposure()
             if self.cur_lum > self.prev_lum * 1.5 or self.cur_lum < self.prev_lum * .5 and self.prev_lum > 0:
                 self.light_trigger = True

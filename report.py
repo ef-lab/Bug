@@ -6,9 +6,11 @@ import socket
 
 log_interval = 3600  # interval in seconds
 motion_interval = 60  # motion detection interval in seconds
+camera_interval = 5  # luminance change detection interval in seconds
+camera_resolution = (320, 240)  # camera resolution
 
 logger = Logger()
-cam = BugEye()
+cam = BugEye(interval=camera_interval*1000, resolution=camera_resolution)
 ths = THSensor()
 mot = MotionSensor()
 log_timer = Timer(offset=log_interval*1000+1)
