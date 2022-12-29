@@ -65,6 +65,6 @@ class BugEye:
 
     @staticmethod
     def exp2lum(ss, gain, px):  # convert exposure to lumens
-        EV = np.power(px / 128, 1.8) * np.log2((4000000 / ss) * (1.848 / gain))
+        EV = np.log2(np.power(px / 128, 1.8) * (4000000 / ss) * (1.848 / gain))
         return np.power(2, EV) / 8 if EV >= 0 else 1 / np.power(2, EV) / 8
 
