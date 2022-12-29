@@ -21,11 +21,11 @@ class THSensor:
                 h = self.dhtDevice.humidity
             except RuntimeError as error:
                 # Errors happen fairly often, DHT's are hard to read, just keep going
+                time.sleep(1.0)
                 continue
             except Exception as error:
                 self.dhtDevice.exit()
                 raise error
-            time.sleep(2.0)
         return h
 
     def get_temperature(self):
@@ -35,11 +35,11 @@ class THSensor:
                 t = self.dhtDevice.temperature
             except RuntimeError as error:
                 # Errors happen fairly often, DHT's are hard to read, just keep going
+                time.sleep(1.0)
                 continue
             except Exception as error:
                 self.dhtDevice.exit()
                 raise error
-            time.sleep(2.0)
         return t
 
     def exit(self):
