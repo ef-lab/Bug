@@ -7,7 +7,7 @@ import socket
 log_interval = 3600  # interval in seconds
 motion_interval = 60  # motion detection interval in seconds
 camera_interval = 5  # luminance change detection interval in seconds
-camera_resolution = (320, 240)  # camera resolution
+camera_resolution = (480, 320)  # camera resolution
 
 logger = Logger()
 cam = BugEye(interval=camera_interval*1000, resolution=camera_resolution)
@@ -18,6 +18,7 @@ motion_timer = Timer(offset=motion_interval*1000+1)
 time.sleep(2)
 
 room = (common.Computer & {'hostname': socket.gethostname()}).fetch1('room_id')
+common.Computer().update1({'hostname': socket.gethostname(), 'ping': str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))})
 
 while True:
     if log_timer.elapsed_time() > log_interval*1000:
@@ -32,6 +33,9 @@ while True:
         RL, GL, BL = cam.estimate_channel_luminance()
         key = dict(room_id=room, tmst=tmst, r_channel=RL, g_channel=GL, b_channel=BL, trigger='time')
         logger.log('Luminance', key, schema='monitoring', priority=10)
+
+        # ping
+        common.Computer().update1({'hostname': socket.gethostname(), 'ping': str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))})
 
         # restart timer
         log_timer.start()
