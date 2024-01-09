@@ -4,13 +4,16 @@ import board
 import adafruit_dht
 import psutil
 
-# We first check if a libgpiod process is running. If yes, we kill it!
-for proc in psutil.process_iter():
-    if proc.name() == 'libgpiod_pulsein' or proc.name() == 'libgpiod_pulsei':
-        proc.kill()
 
 class THSensor:
     def __init__(self):
+        self.init()
+
+    def init(self):
+        # We first check if a libgpiod process is running. If yes, we kill it!
+        for proc in psutil.process_iter():
+            if proc.name() == 'libgpiod_pulsein' or proc.name() == 'libgpiod_pulsei':
+                proc.kill()
         # Initial the dht device, with data pin connected to:
         self.dhtDevice = adafruit_dht.DHT22(board.D4)
 
@@ -25,7 +28,9 @@ class THSensor:
                 continue
             except Exception as error:
                 self.dhtDevice.exit()
-                raise error
+                #raise error
+                self.init()
+                time.sleep(5.0)
         return h
 
     def get_temperature(self):
@@ -39,7 +44,9 @@ class THSensor:
                 continue
             except Exception as error:
                 self.dhtDevice.exit()
-                raise error
+                #raise error
+                self.init()
+                time.sleep(5.0)
         return t
 
     def exit(self):
